@@ -10,7 +10,7 @@ import { UserService } from './services/user.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { AdminGuard } from './guards/admin.guard';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common'; // <-- Añadir esto
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -24,17 +24,13 @@ export const routes: Routes = [
       { path: 'usuarios', component: UsersComponent, canActivate: [AdminGuard] }
     ]
   },
+
   { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
   imports: [BrowserModule, RouterModule.forRoot(routes)],
-  providers: [
-    provideHttpClient(),
-    UserService,
-    AuthService,
-    { provide: LocationStrategy, useClass: HashLocationStrategy } // <-- Añadir esto
-  ],
+  providers: [provideHttpClient(), UserService, AuthService],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
