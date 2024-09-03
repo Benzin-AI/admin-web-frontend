@@ -6,7 +6,7 @@ import { Observable, catchError, map, switchMap, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/api/users';
+  private apiUrl = 'https://admin-web-backend.onrender.com/api/users';
 
   constructor(private http: HttpClient) { }
 
