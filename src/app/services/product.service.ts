@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:3000/api/products';
+  private apiUrl = 'https://admin-web-backend.onrender.com/api/products';
 
   constructor(private http: HttpClient) { }
 
