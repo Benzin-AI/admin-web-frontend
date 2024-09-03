@@ -6,7 +6,7 @@ import { Observable, tap, map, catchError, of } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3000/api/auth';
+  private baseUrl = 'https://admin-web-backend.onrender.com/api/auth';
   private currentUserKey = 'currentUser';
   private usersKey = 'usersList'; // Clave para almacenar la lista de usuarios
 
