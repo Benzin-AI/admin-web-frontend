@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 export class ProductsComponent implements OnInit {
   products: any[] = [];
   selectedProduct: any = null;
+  showDetails = false;
 
   constructor(private productService: ProductService) { }
 
@@ -29,20 +30,30 @@ export class ProductsComponent implements OnInit {
       }),
       catchError((error) => {
         console.error('Error al cargar los productos', error);
-        return of([]); // Retornar un observable vacío en caso de error
+        return of([]);
       })
     ).subscribe();
   }
 
   editProduct(product: any): void {
-    this.selectedProduct = { ...product }; // Clonar el producto seleccionado para edición
+    if (!this.showDetails) {
+      this.selectedProduct = { ...product }; // Clonar el producto seleccionado para edición
+    }
   }
 
   addNewProduct(): void {
-    this.selectedProduct = { name: '', price: 0, description: '' }; // Inicializar un nuevo producto vacío
+    if (!this.showDetails) {
+      this.selectedProduct = { name: '', price: 0, description: '' }; // Inicializar un nuevo producto vacío
+    }
   }
 
   onSaveProduct(): void {
+    if (!this.selectedProduct.name || !this.selectedProduct.price) {
+      // Mostrar alerta si los campos requeridos están vacíos
+      alert('Nombre y precio son campos requeridos');
+      return;
+    }
+
     if (this.selectedProduct._id) {
       // Actualizar producto existente
       this.productService.updateProduct(this.selectedProduct._id, this.selectedProduct).subscribe(
@@ -52,6 +63,7 @@ export class ProductsComponent implements OnInit {
             this.products[index] = updatedProduct;
           }
           this.selectedProduct = null; // Limpiar la selección
+          this.showDetails = false; // Ocultar detalles después de la edición
         },
         (error) => {
           console.error('Error al actualizar el producto', error);
@@ -63,6 +75,7 @@ export class ProductsComponent implements OnInit {
         (newProduct) => {
           this.products.push(newProduct); // Añadir el nuevo producto a la lista
           this.selectedProduct = null; // Limpiar la selección
+          this.showDetails = false; // Ocultar detalles después de agregar el producto
         },
         (error) => {
           console.error('Error al agregar el producto', error);
@@ -73,6 +86,7 @@ export class ProductsComponent implements OnInit {
 
   cancelEdit(): void {
     this.selectedProduct = null; // Limpiar la selección y cerrar el formulario de edición
+    this.showDetails = false; // Ocultar detalles cuando se cancela la edición
   }
 
   deleteProduct(id: string): void {
@@ -81,11 +95,22 @@ export class ProductsComponent implements OnInit {
         () => {
           this.products = this.products.filter(product => product._id !== id); // Actualizar la lista eliminando el producto
           this.selectedProduct = null; // Limpiar la selección
+          this.showDetails = false; // Ocultar detalles después de eliminar un producto
         },
         (error) => {
           console.error('Error al eliminar el producto', error);
         }
       );
     }
+  }
+
+  showProductDetails(product: any): void {
+    this.selectedProduct = product; // Asignar el producto seleccionado
+    this.showDetails = true; // Mostrar detalles
+  }
+
+  closeDetails(): void {
+    this.showDetails = false; // Ocultar detalles
+    this.selectedProduct = null; // Limpiar el producto seleccionado
   }
 }
