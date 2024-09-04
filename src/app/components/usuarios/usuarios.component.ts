@@ -86,7 +86,7 @@ export class UsersComponent implements OnInit {
           this.isAddingUser = false;
         },
         (error) => {
-          console.error('Error al agregar el usuario', error);
+          console.error('Ese email ya existe', error);
           if (error.status === 403) {
             this.errorMessage = 'No tienes permisos para agregar usuarios.';
           } else {
