@@ -15,10 +15,9 @@ export class UsersComponent implements OnInit {
   selectedUser: any = null;
   currentUser: any = { roles: [] };
   isAddingUser: boolean = false;
+  errorMessage: string = '';
 
-  constructor(
-    private userService: UserService
-  ) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -31,6 +30,7 @@ export class UsersComponent implements OnInit {
       },
       (error) => {
         console.error('Error al cargar los usuarios', error);
+        this.errorMessage = 'Error al cargar los usuarios';
       }
     );
   }
@@ -53,9 +53,15 @@ export class UsersComponent implements OnInit {
   }
 
   onSaveUser(): void {
-    console.log('Guardando usuario:', this.currentUser);
+    if (!this.currentUser.name || !this.currentUser.email || !this.currentUser.password || this.currentUser.roles.length === 0) {
+      this.errorMessage = 'Todos los campos (Nombre, Email, Contraseña y Roles) son requeridos';
+      return;
+    }
+
+    this.errorMessage = ''; // Limpiar mensajes de error previos
+
     if (this.selectedUser) {
-      // Editar un usuario existente
+      // Actualizar usuario existente
       this.userService.updateUser(this.selectedUser._id, this.currentUser).subscribe(
         (updatedUser) => {
           const index = this.users.findIndex(user => user._id === updatedUser._id);
@@ -68,9 +74,11 @@ export class UsersComponent implements OnInit {
         },
         (error) => {
           console.error('Error al actualizar el usuario', error);
+          this.errorMessage = 'Error al actualizar el usuario';
         }
       );
-    } else if (this.currentUser) {
+    } else {
+      // Crear nuevo usuario
       this.userService.createUser(this.currentUser).subscribe(
         (createdUser) => {
           this.users.push(createdUser);
@@ -79,6 +87,11 @@ export class UsersComponent implements OnInit {
         },
         (error) => {
           console.error('Error al agregar el usuario', error);
+          if (error.status === 403) {
+            this.errorMessage = 'No tienes permisos para agregar usuarios.';
+          } else {
+            this.errorMessage = 'Error al agregar el usuario';
+          }
         }
       );
     }
@@ -100,9 +113,9 @@ export class UsersComponent implements OnInit {
         },
         (error) => {
           console.error('Error al eliminar el usuario', error);
+          this.errorMessage = 'Error al eliminar el usuario';
         }
       );
     }
   }
 }
-
