@@ -33,13 +33,13 @@
           name="price"
           #price="ngModel"
           required
-          min="0"           <!-- Asegura que el valor sea positivo -->
-          step="1"          <!-- Permite solo valores enteros -->
-          (input)="price.value = price.value.replace(/[^0-9]/g, '')"  <!-- Elimina caracteres no numéricos -->
+          inputmode="decimal"
+          step="1"
+          min="0"
         />
         <!-- Mensaje de error para el campo Precio -->
         <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger">
-          Precio es un campo requerido y debe ser numérico
+          Precio es un campo requerido
         </div>
       </div>
       <div class="mb-3">
