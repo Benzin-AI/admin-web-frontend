@@ -54,6 +54,12 @@ export class ProductsComponent implements OnInit {
       return;
     }
 
+    // Validar que el precio sea un número entero positivo
+    if (!Number.isInteger(this.selectedProduct.price) || this.selectedProduct.price < 0) {
+      alert('El precio debe ser un número entero positivo');
+      return;
+    }
+
     if (this.selectedProduct._id) {
       // Actualizar producto existente
       this.productService.updateProduct(this.selectedProduct._id, this.selectedProduct).subscribe(
