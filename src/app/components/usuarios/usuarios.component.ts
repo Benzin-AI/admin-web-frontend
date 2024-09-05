@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-user-list',
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class UsersComponent implements OnInit {
   users: any[] = [];
   selectedUser: any = null;
-  currentUser: any = { email: '', roles: [] };
+  currentUser: any = { roles: [] };
   isAddingUser: boolean = false;
   errorMessage: string = '';
 
@@ -58,6 +58,13 @@ export class UsersComponent implements OnInit {
       return;
     }
 
+    // Validar formato del correo electrónico
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(this.currentUser.email)) {
+      this.errorMessage = 'El formato del email no es válido';
+      return;
+    }
+
     this.errorMessage = ''; // Limpiar mensajes de error previos
 
     if (this.selectedUser) {
@@ -73,6 +80,7 @@ export class UsersComponent implements OnInit {
           this.isAddingUser = false;
         },
         (error) => {
+          console.error('Error al actualizar el usuario', error);
           this.errorMessage = 'Error al actualizar el usuario';
         }
       );
@@ -85,10 +93,11 @@ export class UsersComponent implements OnInit {
           this.isAddingUser = false;
         },
         (error) => {
+          console.error('Error al agregar el usuario', error);
           if (error.status === 403) {
             this.errorMessage = 'No tienes permisos para agregar usuarios.';
           } else {
-            this.errorMessage = 'Ese mail ya existe!';
+            this.errorMessage = 'Error al agregar el usuario';
           }
         }
       );
