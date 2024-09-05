@@ -34,23 +34,23 @@
       <div class="mb-3">
         <label for="email" class="form-label text-color">Email</label>
         <input
-          type="email"
-          id="email"
-          class="form-control"
-          [(ngModel)]="currentUser.email"
-          name="email"
-          #email="ngModel"
-          [readonly]="selectedUser ? true : null"
-          [ngClass]="{ 'bg-light': selectedUser }"
-          required
+        type="email"
+        id="email"
+        class="form-control"
+        [(ngModel)]="currentUser.email"
+        name="email"
+        #email="ngModel"
+        [readonly]="selectedUser ? true : null"
+        [ngClass]="{ 'bg-light': selectedUser }"
+        required
+        email
         />
         <!-- Mensaje de error para el campo Email -->
         <div
           *ngIf="email.invalid && (email.dirty || email.touched)"
           class="text-danger"
         >
-          <div *ngIf="email.errors?.['required']">Email es un campo requerido</div>
-          <div *ngIf="email.errors?.['email']">El formato del email es inválido</div>
+          Email es un campo requerido
         </div>
       </div>
       <div class="mb-3">
