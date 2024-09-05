@@ -26,17 +26,16 @@
       <div class="mb-3">
         <label for="price" class="form-label text-color">Precio</label>
         <input
-          type="number"
-          id="price"
-          class="form-control"
-          [(ngModel)]="selectedProduct.price"
-          name="price"
-          #price="ngModel"
-          required
-          inputmode="decimal"
-          step="1"
-          min="0"
-        />
+        type="text"
+        id="price"
+        class="form-control"
+        [(ngModel)]="selectedProduct.price"
+        name="price"
+        #price="ngModel"
+        required
+        appIntegerOnly
+        title="Solo números enteros son permitidos"
+      />
         <!-- Mensaje de error para el campo Precio -->
         <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger">
           Precio es un campo requerido
