@@ -49,7 +49,8 @@
           *ngIf="email.invalid && (email.dirty || email.touched)"
           class="text-danger"
         >
-          Email es un campo requerido
+          <div *ngIf="email.errors?.['required']">Email es un campo requerido</div>
+          <div *ngIf="email.errors?.['email']">El formato del email es inválido</div>
         </div>
       </div>
       <div class="mb-3">
