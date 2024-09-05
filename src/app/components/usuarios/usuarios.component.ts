@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class UsersComponent implements OnInit {
   users: any[] = [];
   selectedUser: any = null;
-  currentUser: any = { roles: [] };
+  currentUser: any = { email: '', roles: [] };
   isAddingUser: boolean = false;
   errorMessage: string = '';
 
